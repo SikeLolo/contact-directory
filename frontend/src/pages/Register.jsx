@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 import axios from 'axios';
 
 const Register = () => {
@@ -8,6 +9,7 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [altpassword, setAltPassword] = useState('');
     const navigate = useNavigate();
+    const { user, login, logout } = useAuth();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -19,6 +21,7 @@ const Register = () => {
         }
         try {
             const response = await axios.post('http://localhost:5000/api/auth/register', {username, password})
+            login({ username: username, password: password})
             alert('Account Made');
             navigate('/profile');
         } catch (error) {

@@ -1,12 +1,14 @@
-import React from 'react'
-import { useState } from 'react';
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 import axios from 'axios';
 
 const Logout = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
+
   const redirectRegister = () => {
     navigate('/register');
   }
@@ -14,6 +16,7 @@ const Logout = () => {
     event.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', {username, password})
+      login({username: username, password: password});
       navigate('/profile');
     } catch (error) {
       if(error.response && error.response.status === 400){
